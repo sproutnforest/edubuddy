@@ -30,13 +30,54 @@ app.post('/addData', async (req, res) => {
   
       const newData = req.body;
       console.log("Received new piece:", newData);
-      const result = await materialCollection.insertOne(newData);
+      const result = await materialCollection.insertMany(newData);
       res.status(201).json({ insertedId: result.insertedId });
     } catch (error) {
       console.error("Error inserting data:", error);
       res.status(500).send('Error inserting data into MongoDB');
     }
 })
+
+app.post('/register', async (req, res) => {
+  try {
+    await client.connect(); 
+    const database = client.db('edubuddy_data');
+    const materialCollection = database.collection('teachers');
+
+    const newData = req.body;
+    console.log("Received new piece:", newData);
+    const result = await materialCollection.insertOne(newData);
+    res.status(201).json({ insertedId: result.insertedId });
+  } catch (error) {
+    console.error("Error inserting data:", error);
+    res.status(500).send('Error inserting data into MongoDB');
+  }
+})
+
+app.post('/login', async (req, res) => {
+  try {
+    await client.connect();
+    const database = client.db('edubuddy_data');
+    const teachers = database.collection('teachers');
+
+    const { username, password } = req.body;
+
+    const user = await teachers.findOne({ Username: username });
+
+    if (!user || user.Password !== password) {
+      return res.status(401).json({ message: "Invalid username or password" });
+    }
+
+    res.status(200).json({
+      message: "Login successful",
+      Username: user.Username,
+      AsalSekolah: user.AsalSekolah
+    });
+  } catch (error) {
+    console.error("Login error:", error);
+    res.status(500).send('Error during login');
+  }
+});
 
 app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`);

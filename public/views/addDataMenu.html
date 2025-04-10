@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="MATCHI - Your destination for fashionable men's and women's clothing. Enjoy exclusive discounts and offers.">
+    <meta name="keywords" content="fashion, fabric, trends, seasons, clothing">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>edubuddy</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="../styles/addDataMenu.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+</head>
+    <body ng-app="edubuddy" ng-controller="AddDataMenuController" id="home">   
+        <nav class="navbar sticky-top">
+            <div class="logo"><img src="../images/logo.png" id="logoimg"> GuruBunny <div class="logo2"> | AI Chatbot </div> </div>
+            <ul class="nav-links">
+              <li><a href="#">Tema/Kategori</a></li>
+              <li><a href="#">Data Input</a></li>
+              <li><a href="#">Kontak</a></li>
+              <li><button type="button" class="btn btn-danger">Logout</button></li>
+            </ul>
+        </nav>
+
+        <div class="container mt-5">
+            <div class="custom-box p-4">
+              <h4 class="mb-4 tambahdata">Tambah Data Pelajaran</h4>
+              <form ng-submit="submitForm()" id="myForm">
+                <div class="formInputs">
+                    <div class="left">
+                        <h5>Kategori Wajib/Tambahan:</h5>
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                              {{ selectedKategori || 'Pilih Kategori' }}
+                            </button>
+                            <ul class="dropdown-menu">
+                              <li><a class="dropdown-item" href="#" ng-click="selectKategori('Wajib')">Wajib</a></li>
+                              <li><a class="dropdown-item" href="#" ng-click="selectKategori('Tambahan')">Tambahan</a></li>
+                            </ul>
+                          </div>
+                        <h5 style="margin-top: 35px;">Kelas:</h5>
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                              {{ selectedKelas || 'Pilih Kelas' }}
+                            </button>
+                            <ul class="dropdown-menu">
+                              <li><a class="dropdown-item" href="#" ng-click="selectKelas('1')">1</a></li>
+                              <li><a class="dropdown-item" href="#" ng-click="selectKelas('2')">2</a></li>
+                              <li><a class="dropdown-item" href="#" ng-click="selectKelas('3')">3</a></li>
+                              <li><a class="dropdown-item" href="#" ng-click="selectKelas('4')">4</a></li>
+                              <li><a class="dropdown-item" href="#" ng-click="selectKelas('5')">5</a></li>
+                              <li><a class="dropdown-item" href="#" ng-click="selectKelas('6')">6</a></li>
+                            </ul>
+                          </div>
+
+                    </div>
+                    <div class="right">
+                        <h5>Mata Pelajaran:</h5>
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                              {{ selectedMataPelajaran || 'Pilih Mata Pelajaran' }}
+                            </button>
+                            <ul class="dropdown-menu">
+                              <li><a class="dropdown-item" href="#" ng-click="selectMapel('PJOK')">PJOK</a></li>
+                              <li><a class="dropdown-item" href="#" ng-click="selectMapel('Seni Budaya')">Seni Budaya</a></li>
+                              <li><a class="dropdown-item" href="#" ng-click="selectMapel('PKN')">PKN</a></li>
+                            </ul>
+                          </div>
+                        <h5 style="margin-top: 35px;">Sumber Buku:</h5>
+                        <div class="dropdown">
+                            <input type="text" class="form-control" placeholder="Pendidikan PJOK untuk Anak Luar Biasa" ng-model="sumberbuku" aria-label="Username" aria-describedby="basic-addon1">
+                        </div>
+                    </div>
+                </div>
+              </form>
+              <div class="mt-3 text-end">
+                <button class="btn submitButton" ng-click="submitForm()">
+                    Submit
+                </button>
+            </div>  
+            </div>
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="../controllers/addDataMenu.js"></script>
+    </body>
+</html>

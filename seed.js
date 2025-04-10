@@ -29,12 +29,22 @@ async function initializeDatabase() {
     const collection = db.collection('subject_material');
 
     const initialData = [
-        {Sumber: "Admin", Pertanyaan: ["Apakah pertanyaannya masuk?", "Apakah pertanyaan ke 2 masuk juga?"], Jawaban: "Ya, masuk", Konteks: "Ya, masuk. Pertanyaannya sudah masuk ke database"},
+        {Sumber: "Admin", Kategori: "Wajib", Pelajaran: "PJOK", Kelas: "1", SumberBuku: "PJOK untuk Anak Luar Biasa", Pertanyaan: ["Apakah pertanyaannya masuk?", "Apakah pertanyaan ke 2 masuk juga?"], Jawaban: "Ya, masuk", Konteks: "Ya, masuk. Pertanyaannya sudah masuk ke database"},
     ];
+
+    const collection2 = db.collection('teachers');
+
+    const initialData2 = [
+        {Username: "Admin", Email: "Admin@email.com", AsalSekolah: "SDN Tarumanagara", Password: "12345"}
+    ]
+
+    const collection3 = db.collection('sessions');
 
     try {
         const result = await collection.insertMany(initialData);
-        console.log(`${result.insertedCount} documents inserted into 'piece' collection.`);
+        const result2 = await collection2.insertMany(initialData2);
+        console.log(`${result.insertedCount} documents inserted into 'subject_material' collection.`);
+        console.log(`${result2.insertedCount} documents inserted into 'teachers' collection.`);
     } catch (error) {
         console.error("Error inserting data:", error);
     } finally {
