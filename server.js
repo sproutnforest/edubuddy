@@ -22,6 +22,46 @@ const client = new MongoClient(uri);
 app.use('/static', express.static('public'));
 app.use(express.json()); // To parse JSON request bodies
 
+app.get('/mapel', async (req, res) => {
+  try {
+    await client.connect();
+    const database = client.db('edubuddy_data');
+    const collection = database.collection('subjects'); // make sure this exists
+    const data = await collection.find().toArray();
+    res.status(200).json(data);
+  } catch (error) {
+    console.error('Error fetching subjects:', error);
+    res.status(500).send('Error fetching subjects');
+  }
+});
+
+app.get('/viewData', async (req, res) => {
+  try {
+    await client.connect();
+    const database = client.db('edubuddy_data');
+    const collection = database.collection('subject_material'); 
+  
+    const data = await collection.find().toArray();
+    console.log(data);
+    res.status(200).json(data);
+  } catch (error) {
+    console.error('Error fetching subjects:', error);
+    res.status(500).send('Error fetching subjects');
+  }
+});
+
+app.get('/getDataById/:id', async (req, res) => {
+  try {
+    const id = req.params.id;
+    const database = client.db('edubuddy_data');
+    const collection = database.collection('subject_material');
+    const data = await collection.findOne({ _id: new ObjectId(id) });
+    res.json(data);
+  } catch (err) {
+    res.status(500).send('Error retrieving data');
+  }
+});
+
 app.post('/addData', async (req, res) => {
     try {
       await client.connect(); 
@@ -37,6 +77,44 @@ app.post('/addData', async (req, res) => {
       res.status(500).send('Error inserting data into MongoDB');
     }
 })
+
+app.delete('/deleteData/:id', async (req, res) => {
+  const id = req.params.id;
+  try {
+    await client.connect();
+    const database = client.db('edubuddy_data');
+    const collection = database.collection('subject_material');
+
+    const result = await collection.deleteOne({ _id: new ObjectId(id) });
+
+    if (result.deletedCount === 1) {
+      res.status(200).send('Deleted successfully');
+    } else {
+      res.status(404).send('No document found');
+    }
+  } catch (error) {
+    console.error('Delete error:', error);
+    res.status(500).send('Error deleting document');
+  }
+});
+
+app.put('/updateData/:id', async (req, res) => {
+  try {
+    const id = req.params.id;
+    const updatedData = req.body;
+    await client.connect();
+    const database = client.db('edubuddy_data');
+    const collection = database.collection('subject_material');
+    const result = await collection.updateOne(
+      { _id: new ObjectId(id) },
+      { $set: updatedData }
+    );
+    res.send('Updated successfully');
+  } catch (err) {
+    res.status(500).send('Error updating data');
+  }
+});
+
 
 app.post('/register', async (req, res) => {
   try {

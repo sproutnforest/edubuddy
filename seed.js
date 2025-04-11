@@ -29,7 +29,7 @@ async function initializeDatabase() {
     const collection = db.collection('subject_material');
 
     const initialData = [
-        {Sumber: "Admin", Kategori: "Wajib", Pelajaran: "PJOK", Kelas: "1", SumberBuku: "PJOK untuk Anak Luar Biasa", Pertanyaan: ["Apakah pertanyaannya masuk?", "Apakah pertanyaan ke 2 masuk juga?"], Jawaban: "Ya, masuk", Konteks: "Ya, masuk. Pertanyaannya sudah masuk ke database"},
+        {Sumber: "Admin", SumberSekolah: "SDN Tarumanagara", Kategori: "Wajib", Pelajaran: "PJOK", Kelas: "1", SumberBuku: "PJOK untuk Anak Luar Biasa", Pertanyaan: ["Apakah pertanyaannya masuk?", "Apakah pertanyaan ke 2 masuk juga?"], Jawaban: "Ya, masuk", Konteks: "Ya, masuk. Pertanyaannya sudah masuk ke database"},
     ];
 
     const collection2 = db.collection('teachers');
@@ -38,13 +38,19 @@ async function initializeDatabase() {
         {Username: "Admin", Email: "Admin@email.com", AsalSekolah: "SDN Tarumanagara", Password: "12345"}
     ]
 
-    const collection3 = db.collection('sessions');
+    const collection3 = db.collection('subjects');
+
+    const initialData3 = [
+        {Subject: "PJOK"}, {Subject: "PKN"}, {Subject: "Bahasa Indonesia"}, {Subject: "Seni Budaya"}
+    ]
 
     try {
         const result = await collection.insertMany(initialData);
         const result2 = await collection2.insertMany(initialData2);
+        const result3 = await collection3.insertMany(initialData3);
         console.log(`${result.insertedCount} documents inserted into 'subject_material' collection.`);
         console.log(`${result2.insertedCount} documents inserted into 'teachers' collection.`);
+        console.log(`${result3.insertedCount} documents inserted into 'subjects' collection.`);
     } catch (error) {
         console.error("Error inserting data:", error);
     } finally {

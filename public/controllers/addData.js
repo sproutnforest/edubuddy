@@ -53,6 +53,7 @@ app.controller('AddDataController', function($scope, $http) {
       if (questions.length && answer && context && $scope.source) {
         const materials = questions.map(q => ({
           Sumber: $scope.source,
+          SumberSekolah: sekolah,
           Kategori: kategori,
           Pelajaran: mapel,
           Kelas: kelas,

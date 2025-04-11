@@ -59,15 +59,17 @@
                     <div class="right">
                         <h5>Mata Pelajaran:</h5>
                         <div class="dropdown">
-                            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                              {{ selectedMataPelajaran || 'Pilih Mata Pelajaran' }}
-                            </button>
-                            <ul class="dropdown-menu">
-                              <li><a class="dropdown-item" href="#" ng-click="selectMapel('PJOK')">PJOK</a></li>
-                              <li><a class="dropdown-item" href="#" ng-click="selectMapel('Seni Budaya')">Seni Budaya</a></li>
-                              <li><a class="dropdown-item" href="#" ng-click="selectMapel('PKN')">PKN</a></li>
-                            </ul>
-                          </div>
+                          <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            {{ selectedMataPelajaran || 'Mata Pelajaran' }}
+                          </button>
+                          <ul class="dropdown-menu">
+                            <li ng-repeat="item in mapelList">
+                              <a class="dropdown-item" href="#" ng-click="selectMapel(item.Subject)">
+                                {{ item.Subject }}
+                              </a>
+                            </li>
+                          </ul>
+                        </div>
                         <h5 style="margin-top: 35px;">Sumber Buku:</h5>
                         <div class="dropdown">
                             <input type="text" class="form-control" placeholder="Pendidikan PJOK untuk Anak Luar Biasa" ng-model="sumberbuku" aria-label="Username" aria-describedby="basic-addon1">

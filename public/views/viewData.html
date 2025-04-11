@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="MATCHI - Your destination for fashionable men's and women's clothing. Enjoy exclusive discounts and offers.">
+    <meta name="keywords" content="fashion, fabric, trends, seasons, clothing">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>edubuddy</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="../styles/viewData.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+</head>
+    <body ng-app="edubuddy" ng-controller="ViewDataController" id="home">   
+        <nav class="navbar sticky-top">
+            <div class="logo"><img src="../images/logo.png" id="logoimg"> GuruBunny <div class="logo2"> | AI Chatbot </div> </div>
+            <ul class="nav-links">
+              <li><a href="#">Tema/Kategori</a></li>
+              <li><a href="#">Data Input</a></li>
+              <li><a href="#">Kontak</a></li>
+              <li><button type="button" class="btn btn-danger">Logout</button></li>
+            </ul>
+        </nav>
+        <div class="tableBox">
+            <div class="insideTableBox">
+                <table class="table" border="1">
+                    <thead>
+                    <tr>
+                        <th>Kelas</th>
+                        <th>Pelajaran</th>
+                        <th>Kategori</th>
+                        <th>Pertanyaan</th>
+                        <th>Jawaban</th>
+                        <th>Konteks</th>
+                        <th>Sumber Buku</th>
+                        <th>Edit</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="item in filteredData">
+                        <td>{{ item.Kelas }}</td>
+                        <td>{{ item.Pelajaran }}</td>
+                        <td>{{ item.Kategori }}</td>
+                        <td>{{ item.Pertanyaan }}</td>
+                        <td>{{ item.Jawaban }}</td>
+                        <td>{{ item.Konteks }}</td>
+                        <td>{{ item.SumberBuku }}</td>
+                        <td>
+                            <!-- Edit button -->
+                            <button type="button" class="btn btn-outline-dark"
+                                    ng-click="editData(item._id)">
+                              <i class="bi bi-pencil"></i>
+                            </button>
+                        
+                            <!-- Delete button -->
+                            <button type="button" class="btn btn-outline-dark"
+                                    ng-click="deleteData(item._id)">
+                              <i class="bi bi-trash"></i>
+                            </button>
+                          </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="../controllers/viewData.js"></script>
+    </body>
+</html>

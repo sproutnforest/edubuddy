@@ -15,8 +15,16 @@ app.controller('AddDataMenuController', function($scope, $http) {
 
     $scope.selectedMataPelajaran = ''; // default is empty
 
-    $scope.selectMapel = function(value) {
-      $scope.selectedMataPelajaran = value;
+    $http.get('http://localhost:3000/mapel')
+      .then(function(response) {
+        $scope.mapelList = response.data;
+      })
+      .catch(function(error) {
+        console.error('Error loading mapel:', error);
+      });
+
+    $scope.selectMapel = function(mapel) {
+      $scope.selectedMataPelajaran = mapel;
     };
 
     $scope.submitForm = function() {
