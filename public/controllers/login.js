@@ -15,6 +15,14 @@ app.controller('LoginController', function($scope, $http) {
       localStorage.setItem('Username', response.data.Username);
       localStorage.setItem('AsalSekolah', response.data.AsalSekolah);
       localStorage.setItem('LoginTime', new Date().toISOString()); 
+      const redirectUrl = localStorage.getItem("redirectAfterLogin");
+
+      if (redirectUrl) {
+        localStorage.removeItem("redirectAfterLogin");
+        window.location.href = redirectUrl;
+      } else {
+        window.location.href = 'viewDataMenu.html';
+      }
     })
     console.log("hi");
   };

@@ -13,18 +13,23 @@
     <link rel="stylesheet" href="../styles/viewDataMenu.css">
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
 </head>
-    <body ng-app="edubuddy" ng-controller="AddDataMenuController" id="home">   
+    <body ng-app="edubuddy" ng-controller="ViewDataMenuController" id="home">   
         <nav class="navbar sticky-top">
             <div class="logo"><img src="../images/logo.png" id="logoimg"> GuruBunny <div class="logo2"> | AI Chatbot </div> </div>
             <ul class="nav-links">
-              <li><a href="#">Tema/Kategori</a></li>
-              <li><a href="#">Data Input</a></li>
-              <li><a href="#">Kontak</a></li>
-              <li><button type="button" class="btn btn-danger">Logout</button></li>
+              <li><a href="./addDataMenu.html">Tambah Data</a></li>
+              <li><a href="./viewDataMenu.html">Lihat Data</a></li>
+              <li><a href="./about.html">Tentang</a></li>
+              <li><button type="button" class="btn btn-danger" ng-click="logout()">Logout</button></li>
             </ul>
         </nav>
 
         <div class="container mt-5 filterDataBox">
+          <div class="mt-3 text-end addDataButton">
+            <button class="btn submitButton" ng-click="addData()">
+                Tambah Data
+            </button>
+          </div>  
             <div class="custom-box p-4">
               <h4 class="mb-4 tambahdata">Filter Data</h4>
               <form ng-submit="submitForm()" id="myForm">

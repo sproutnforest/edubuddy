@@ -21,9 +21,20 @@ app.controller('RegisterController', function($scope, $http) {
             $scope.email = '';
             $scope.school = '';
             $scope.password = '';
+            const redirectUrl = localStorage.getItem("redirectAfterLogin");
+
+            if (redirectUrl) {
+              localStorage.removeItem("redirectAfterLogin");
+              window.location.href = redirectUrl;
+            } else {
+              window.location.href = 'viewDataMenu.html'; 
+            }
+
         })
         .catch(function(error) {
             console.error('Error adding data:', error);
         });
   };
+
+  
 });

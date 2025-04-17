@@ -61,8 +61,17 @@
 
   .filterDataBox {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
+  }
+
+  .addDataButton{
+    width: 500px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: end;
   }
 
   .custom-box {
@@ -95,11 +104,18 @@
   .top, .bottom {
     display: flex;
     justify-content: center;
+    align-items: center;
     gap: 15px;
   }
 
   .formInputs h5 {
     font-weight: 600;
+  }
+
+  .dropdown-toggle {
+    background-color: white; 
+    color: gray;
+    border: 1px solid gray;
   }
   
   

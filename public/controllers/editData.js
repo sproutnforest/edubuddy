@@ -13,12 +13,13 @@ app.controller('EditDataController', function($scope, $http) {
 
     if (diffMinutes > 30) {
       localStorage.clear();
-      alert("Session expired. Please login again.");
-      localStorage.clear();
+      localStorage.setItem("redirectAfterLogin", window.location.href);
+      window.location.href = 'login.html';
     }
   } else {
     localStorage.clear();
-    alert("No login session found. Please login.");
+    localStorage.setItem("redirectAfterLogin", window.location.href);
+    window.location.href = 'login.html';
   }
   console.log("Logged in as:", username);
   console.log("From school:", sekolah);
@@ -68,7 +69,10 @@ app.controller('EditDataController', function($scope, $http) {
       });
   };
   
-  
+  $scope.logout = function() {
+    localStorage.clear();
+    window.location.href = 'login.html';
+  }
 });
 
 //http://127.0.0.1:5500/public/views/addData.html?kategori=Tambahan&kelas=2&mapel=Seni%20Budaya&sumber=pjok%201

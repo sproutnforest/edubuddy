@@ -1,6 +1,30 @@
 var app = angular.module('edubuddy', []);
 
 app.controller('AddDataMenuController', function($scope, $http) {
+  const username = localStorage.getItem('Username');
+  const sekolah = localStorage.getItem('AsalSekolah');
+  const loginTimeStr = localStorage.getItem('LoginTime');
+  console.log(localStorage.getItem('LoginTime'));
+
+  if (loginTimeStr) {
+    const loginTime = new Date(loginTimeStr);
+    const now = new Date();
+    const diffMinutes = (now - loginTime) / 60000;
+
+    if (diffMinutes > 30) {
+      localStorage.clear();
+      localStorage.setItem("redirectAfterLogin", window.location.href);
+      window.location.href = 'login.html';
+    }
+  } else {
+      localStorage.clear();
+      localStorage.setItem("redirectAfterLogin", window.location.href);
+      window.location.href = 'login.html';
+  }
+  console.log("Logged in as:", username);
+  console.log("From school:", sekolah);
+  console.log("Stored LoginTime:", localStorage.getItem('LoginTime'));
+
     $scope.selectedKategori = ''; // default is empty
 
     $scope.selectKategori = function(value) {
@@ -40,4 +64,9 @@ app.controller('AddDataMenuController', function($scope, $http) {
         const url = `addData.html?kategori=${kategori}&kelas=${kelas}&mapel=${mapel}&sumber=${sumber}`;
         window.location.href = url;
       };
+
+      $scope.logout = function() {
+        localStorage.clear();
+        window.location.href = 'login.html';
+      }
 });

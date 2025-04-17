@@ -1,12 +1,34 @@
 var app = angular.module('edubuddy', []);
 
 app.controller('ViewDataController', function($scope, $http, $window) {
+  const username = localStorage.getItem('Username');
+  const sekolah = localStorage.getItem('AsalSekolah');
+  const loginTimeStr = localStorage.getItem('LoginTime');
+  console.log(localStorage.getItem('LoginTime'));
+
+  if (loginTimeStr) {
+    const loginTime = new Date(loginTimeStr);
+    const now = new Date();
+    const diffMinutes = (now - loginTime) / 60000;
+
+    if (diffMinutes > 30) {
+      localStorage.clear();
+      localStorage.setItem("redirectAfterLogin", window.location.href);
+      window.location.href = 'login.html';
+    }
+  } else {
+    localStorage.clear();
+    localStorage.setItem("redirectAfterLogin", window.location.href);
+    window.location.href = 'login.html';
+  }
+  console.log("Logged in as:", username);
+  console.log("From school:", sekolah);
+  console.log("Stored LoginTime:", localStorage.getItem('LoginTime'));
+
   const params = new URLSearchParams($window.location.search);
   const kategori = params.get("kategori");
     const mapel = params.get("mapel");
     const kelasList = params.getAll("kelas");
-    const username = localStorage.getItem('Username');
-    const sekolah = localStorage.getItem('AsalSekolah');
 
     console.log(kategori + mapel + kelasList + username + sekolah)
 
@@ -34,6 +56,10 @@ app.controller('ViewDataController', function($scope, $http, $window) {
     $scope.editData = function(item) {
         window.location.href = `editData.html?id=${item}`;
       };
+
+      $scope.addData = function() {
+        window.location.href = 'addDataMenu.html';
+      }
       
       $scope.deleteData = function(id) {
         if (confirm("Are you sure you want to delete this item?")) {
@@ -47,5 +73,10 @@ app.controller('ViewDataController', function($scope, $http, $window) {
             });
         }
       };
+
+      $scope.logout = function() {
+        localStorage.clear();
+        window.location.href = 'login.html';
+      }
 
 });

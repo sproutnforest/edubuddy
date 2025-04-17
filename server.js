@@ -20,13 +20,13 @@ const uri = 'mongodb://localhost:27017';
 const client = new MongoClient(uri);
 
 app.use('/static', express.static('public'));
-app.use(express.json()); // To parse JSON request bodies
+app.use(express.json()); 
 
 app.get('/mapel', async (req, res) => {
   try {
     await client.connect();
     const database = client.db('edubuddy_data');
-    const collection = database.collection('subjects'); // make sure this exists
+    const collection = database.collection('subjects'); 
     const data = await collection.find().toArray();
     res.status(200).json(data);
   } catch (error) {

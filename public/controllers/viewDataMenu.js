@@ -1,6 +1,29 @@
 var app = angular.module('edubuddy', []);
 
-app.controller('AddDataMenuController', function($scope, $http) {
+app.controller('ViewDataMenuController', function($scope, $http) {
+  const username = localStorage.getItem('Username');
+  const sekolah = localStorage.getItem('AsalSekolah');
+  const loginTimeStr = localStorage.getItem('LoginTime');
+  console.log(localStorage.getItem('LoginTime'));
+
+  if (loginTimeStr) {
+    const loginTime = new Date(loginTimeStr);
+    const now = new Date();
+    const diffMinutes = (now - loginTime) / 60000;
+
+    if (diffMinutes > 30) {
+      localStorage.clear();
+      localStorage.setItem("redirectAfterLogin", window.location.href);
+      window.location.href = 'login.html';
+    }
+  } else {
+    localStorage.clear();
+    localStorage.setItem("redirectAfterLogin", window.location.href);
+    window.location.href = 'login.html';
+  }
+  console.log("Logged in as:", username);
+  console.log("From school:", sekolah);
+  console.log("Stored LoginTime:", localStorage.getItem('LoginTime'));
 
     $http.get('http://localhost:3000/mapel')
       .then(function(response) {
@@ -35,7 +58,9 @@ app.controller('AddDataMenuController', function($scope, $http) {
         return selected; 
     };
       
-
+    $scope.addData = function() {
+      window.location.href = 'addDataMenu.html';
+    }
 
     $scope.submitForm = function() {
         console.log($scope.selectedKategori);
@@ -48,4 +73,9 @@ app.controller('AddDataMenuController', function($scope, $http) {
         const url = `viewData.html?kategori=${$scope.selectedKategori}&kelas=${kelas}&mapel=${$scope.selectedMataPelajaran}`;
         window.location.href = url;    
     };
+
+    $scope.logout = function() {
+      localStorage.clear();
+      window.location.href = 'login.html';
+    }
 });

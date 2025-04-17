@@ -61,9 +61,24 @@
 
   .tableBox {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     padding: 50px;
+  }
+
+  .addDataButton{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: end;
+    width: 80%;
+  }
+
+  .submitButton {
+    background-color: #7B452A;
+    color: #E6DBC9;
+    margin-bottom: 20px;
   }
 
   th, td {
