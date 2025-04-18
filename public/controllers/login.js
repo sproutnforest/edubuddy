@@ -23,7 +23,13 @@ app.controller('LoginController', function($scope, $http) {
       } else {
         window.location.href = 'viewDataMenu.html';
       }
-    })
-    console.log("hi");
+    }).catch(function(error) {
+      if (error.status === 401) {
+        alert("Username atau password salah.");
+      } else {
+        alert("Terjadi kesalahan saat login. Silakan coba lagi nanti.");
+      }
+      console.error("Login error:", error);
+    });
   };
 });

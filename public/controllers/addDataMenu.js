@@ -52,6 +52,10 @@ app.controller('AddDataMenuController', function($scope, $http) {
     };
 
     $scope.submitForm = function() {
+        if (!$scope.selectedKategori || !$scope.selectedKelas || !$scope.selectedMataPelajaran || !$scope.sumberbuku) {
+          alert('Semua field wajib diisi.');
+          return;
+      }
         console.log($scope.selectedKategori);
         console.log($scope.selectedKelas)
         console.log($scope.selectedMataPelajaran);

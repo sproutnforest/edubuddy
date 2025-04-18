@@ -63,6 +63,17 @@ app.controller('ViewDataMenuController', function($scope, $http) {
     }
 
     $scope.submitForm = function() {
+      const anyKelasSelected = Object.values($scope.selectedCheckboxes || {}).some(Boolean);
+
+    if (
+        !$scope.selectedKategori ||
+        !$scope.selectedMataPelajaran ||
+        !anyKelasSelected
+    ) {
+        alert('Semua field wajib diisi (Kategori, Mata Pelajaran, dan minimal satu Kelas).');
+        return;
+    }
+
         console.log($scope.selectedKategori);
         const kelasList = $scope.getSelectedKelas();
         const kelas = kelasList.map(encodeURIComponent).join('&kelas='); 
