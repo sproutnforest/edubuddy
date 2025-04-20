@@ -35,7 +35,7 @@ app.controller('EditDataController', function($scope, $http) {
   $scope.context = '';
   $scope.source = username;
 
-  $http.get('http://localhost:3000/getDataById/' + dataId)
+  $http.get('http://103.75.25.77:3000/getDataById/' + dataId)
   .then(function(response) {
     $scope.editItem = response.data;
     console.log($scope.editItem);
@@ -59,7 +59,7 @@ app.controller('EditDataController', function($scope, $http) {
       sumber: $scope.editItem.sumber
     };
   
-    $http.put('http://localhost:3000/updateData/' + dataId, updatedData)
+    $http.put('http://103.75.25.77:3000/updateData/' + dataId, updatedData)
       .then(function(response) {
         alert("Data updated successfully!");
         window.location.href = document.referrer;

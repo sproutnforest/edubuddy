@@ -32,7 +32,7 @@ app.controller('ViewDataController', function($scope, $http, $window) {
 
     console.log(kategori + mapel + kelasList + username + sekolah)
 
-    $http.get('http://localhost:3000/viewData')
+    $http.get('http://103.75.25.77:3000/viewData')
     .then(function(response) {
         const allData = response.data;
         console.log("All Data:", allData);
@@ -63,7 +63,7 @@ app.controller('ViewDataController', function($scope, $http, $window) {
       
       $scope.deleteData = function(id) {
         if (confirm("Are you sure you want to delete this item?")) {
-          $http.delete('http://localhost:3000/deleteData/' + id)
+          $http.delete('http://103.75.25.77:3000/deleteData/' + id)
             .then(function(response) {
               console.log("Deleted:", response.data);
               $scope.filteredData = $scope.filteredData.filter(item => item._id !== id);

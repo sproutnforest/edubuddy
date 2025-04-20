@@ -6,7 +6,7 @@ app.controller('LoginController', function($scope, $http) {
     console.log("password:", $scope.password);
 
     $http.post('http://103.75.25.77:3000/login', {
-      username: $scope.username,
+      email: $scope.email,
       password: $scope.password
     })
     .then(function(response) {

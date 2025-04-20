@@ -64,7 +64,7 @@ app.controller('AddDataController', function($scope, $http) {
           Konteks: context
         }));
   
-        $http.post('http://localhost:3000/addData', materials)
+        $http.post('http://103.75.25.77:3000/addData', materials)
           .then(function(response) {
             console.log('Data added:', response.data);
             $scope.questions = [{ value: '' }];

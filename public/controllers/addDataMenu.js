@@ -39,7 +39,7 @@ app.controller('AddDataMenuController', function($scope, $http) {
 
     $scope.selectedMataPelajaran = ''; // default is empty
 
-    $http.get('http://localhost:3000/mapel')
+    $http.get('http://103.75.25.77:3000/mapel')
       .then(function(response) {
         $scope.mapelList = response.data;
       })

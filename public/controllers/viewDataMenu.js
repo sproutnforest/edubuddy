@@ -25,7 +25,7 @@ app.controller('ViewDataMenuController', function($scope, $http) {
   console.log("From school:", sekolah);
   console.log("Stored LoginTime:", localStorage.getItem('LoginTime'));
 
-    $http.get('http://localhost:3000/mapel')
+    $http.get('http://103.75.25.77:3000/mapel')
       .then(function(response) {
         $scope.mapelList = [{ Subject: "All" }].concat(response.data);
       })

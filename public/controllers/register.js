@@ -14,7 +14,7 @@ app.controller('RegisterController', function($scope, $http) {
           Password: $scope.password
         }
 
-        $http.post('http://localhost:3000/register', newAccount)
+        $http.post('http://103.75.25.77:3000/register', newAccount)
         .then(function(response) {
             console.log('Data added:', response.data);
             $scope.username = '';

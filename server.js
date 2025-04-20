@@ -138,9 +138,9 @@ app.post('/login', async (req, res) => {
     const database = client.db('edubuddy_data');
     const teachers = database.collection('teachers');
 
-    const { username, password } = req.body;
+    const { email, password } = req.body;
 
-    const user = await teachers.findOne({ Username: username });
+    const user = await teachers.findOne({ Email: email });
 
     if (!user || user.Password !== password) {
       return res.status(401).json({ message: "Invalid username or password" });
