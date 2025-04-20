@@ -62,7 +62,7 @@ app.controller('EditDataController', function($scope, $http) {
     $http.put('http://localhost:3000/updateData/' + dataId, updatedData)
       .then(function(response) {
         alert("Data updated successfully!");
-        window.location.href = 'viewData.html';
+        window.location.href = document.referrer;
       })
       .catch(function(error) {
         console.error('Update failed:', error);
