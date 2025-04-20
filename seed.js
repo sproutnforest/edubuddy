@@ -29,7 +29,8 @@ async function initializeDatabase() {
     const collection = db.collection('subject_material');
 
     const initialData = [
-        {Sumber: "Admin", SumberSekolah: "SDN Tarumanagara", Kategori: "Wajib", Pelajaran: "PJOK", Kelas: "1", SumberBuku: "PJOK untuk Anak Luar Biasa", Pertanyaan: ["Apakah pertanyaannya masuk?", "Apakah pertanyaan ke 2 masuk juga?"], Jawaban: "Ya, masuk", Konteks: "Ya, masuk. Pertanyaannya sudah masuk ke database"},
+        {Sumber: "Admin", SumberSekolah: "SDN Tarumanagara", Kategori: "Wajib", Pelajaran: "PJOK", Kelas: "1", SumberBuku: "PJOK untuk Anak Luar Biasa", Pertanyaan: "Apakah pertanyaannya masuk?", Jawaban: "Ya, masuk", Konteks: "Ya, masuk. Pertanyaannya sudah masuk ke database"},
+        {Sumber: "Admin", SumberSekolah: "SDN Tarumanagara", Kategori: "Wajib", Pelajaran: "PJOK", Kelas: "1", SumberBuku: "PJOK untuk Anak Luar Biasa", Pertanyaan: "Apakah pertanyaan ke 2 masuk juga?", Jawaban: "Ya, masuk", Konteks: "Ya, masuk. Pertanyaannya sudah masuk ke database"},
     ];
 
     const collection2 = db.collection('teachers');
