@@ -5,7 +5,7 @@ app.controller('LoginController', function($scope, $http) {
     console.log("username:",  $scope.username);
     console.log("password:", $scope.password);
 
-    $http.post('http://http://103.75.25.77:3000/login', {
+    $http.post('http://103.75.25.77:3000/login', {
       username: $scope.username,
       password: $scope.password
     })
