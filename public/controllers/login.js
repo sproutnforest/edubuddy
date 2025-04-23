@@ -25,7 +25,7 @@ app.controller('LoginController', function($scope, $http) {
       }
     }).catch(function(error) {
       if (error.status === 401) {
-        alert("Username atau password salah.");
+        alert("Email atau password salah.");
       } else {
         alert("Terjadi kesalahan saat login. Silakan coba lagi nanti.");
       }
