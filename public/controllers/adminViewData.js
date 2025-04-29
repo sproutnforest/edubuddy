@@ -22,7 +22,7 @@ app.controller('AdminViewDataController', function($scope, $http, $window) {
     window.location.href = 'login.html';
   }
   if(username != 'Admin') {
-    window.location.href = 'viewData.html';
+    window.location.href = 'viewDataMenu.html';
   }
 
   const params = new URLSearchParams($window.location.search);
@@ -30,6 +30,11 @@ app.controller('AdminViewDataController', function($scope, $http, $window) {
     const mapel = params.get("mapel");
     const guru = params.get("guru");
     const kelasList = params.getAll("kelas");
+
+    if (!kategori || !mapel || kelasList.length === 0) {
+        window.location.href = 'adminViewDataMenu.html';
+        return;
+      }
 
     $http.get('http://103.75.25.77:3000/viewData')
     .then(function(response) {

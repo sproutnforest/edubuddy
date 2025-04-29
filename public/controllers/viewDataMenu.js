@@ -22,7 +22,7 @@ app.controller('ViewDataMenuController', function($scope, $http) {
     window.location.href = 'login.html';
   }
   if(username == 'Admin') {
-    window.location.href = 'adminViewData.html';
+    window.location.href = 'adminViewDataMenu.html';
   }
 
     $http.get('http://103.75.25.77:3000/mapel')

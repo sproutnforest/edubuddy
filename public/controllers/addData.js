@@ -23,7 +23,7 @@ app.controller('AddDataController', function($scope, $http) {
   }
   
   if(username == 'Admin') {
-    window.location.href = 'adminViewData.html';
+    window.location.href = 'adminViewDataMenu.html';
   }
 
   const queryParams = new URLSearchParams(window.location.search);

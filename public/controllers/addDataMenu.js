@@ -22,7 +22,7 @@ app.controller('AddDataMenuController', function($scope, $http) {
       window.location.href = 'login.html';
   }
   if(username == 'Admin') {
-    window.location.href = 'adminViewData.html';
+    window.location.href = 'adminViewDataMenu.html';
   }
 
     $scope.selectedKategori = ''; // default is empty
