@@ -37,12 +37,11 @@ app.controller('AdminViewDataController', function($scope, $http, $window) {
 
         $scope.filteredData = allData.filter(item => {
         const matchUser = guru === "All" || item.Sumber === guru;
-        const matchSchool = item.SumberSekolah === sekolah;
         const matchKategori = kategori === "All" || item.Kategori === kategori;
         const matchMapel = mapel === "All" || item.Pelajaran === mapel;
         const matchKelas = kelasList.length === 0 || kelasList.includes(item.Kelas);
 
-        return matchUser && matchSchool && matchKategori && matchMapel && matchKelas;
+        return matchUser && matchKategori && matchMapel && matchKelas;
         });
 
         console.log("Filtered Data:", $scope.filteredData);
