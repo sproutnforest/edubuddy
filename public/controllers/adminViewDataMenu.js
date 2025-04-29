@@ -1,6 +1,6 @@
 var app = angular.module('edubuddy', []);
 
-app.controller('ViewDataMenuController', function($scope, $http) {
+app.controller('AdminViewDataMenuController', function($scope, $http) {
   const username = localStorage.getItem('Username');
   const sekolah = localStorage.getItem('AsalSekolah');
   const loginTimeStr = localStorage.getItem('LoginTime');
