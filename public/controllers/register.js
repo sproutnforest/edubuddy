@@ -7,6 +7,10 @@ app.controller('RegisterController', function($scope, $http) {
         console.log("asal sekolah:", $scope.school);
         console.log("password:", $scope.password);
 
+        if($scope.username == "Admin" || $scope.username == "admin") {
+          alert("Maaf, username tidak boleh admin");
+        }
+        else {
         const newAccount = {
           Username: $scope.username,
           Email: $scope.email,
@@ -34,6 +38,7 @@ app.controller('RegisterController', function($scope, $http) {
         .catch(function(error) {
             console.error('Error adding data:', error);
         });
+      }
   };
 
   
