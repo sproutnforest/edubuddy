@@ -34,12 +34,13 @@ app.controller('AdminViewDataMenuController', function($scope, $http) {
       });
     
       $http.get('http://103.75.25.77:3000/guru')
-      .then(function(response) {
-        $scope.guruList = [{ Teacher: "All" }].concat(response.data.Username);
-      })
-      .catch(function(error) {
-        console.error('Error loading guru:', error);
-      }); 
+        .then(function(response) {
+            const usernames = response.data.map(guru => ({ Teacher: guru.Username }));
+            $scope.guruList = [{ Teacher: "All" }].concat(usernames);
+        })
+        .catch(function(error) {
+            console.error('Error loading guru:', error);
+        });
 
     $scope.selectedMataPelajaran = '';
 
