@@ -83,7 +83,7 @@ app.controller('AdminViewDataMenuController', function($scope, $http) {
     if (
         !$scope.selectedKategori ||
         !$scope.selectedMataPelajaran ||
-        !$scopre.selectedGuru ||
+        !$scope.selectedGuru ||
         !anyKelasSelected
     ) {
         alert('Semua field wajib diisi (Kategori, Mata Pelajaran, Guru, dan minimal satu Kelas).');
