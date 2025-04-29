@@ -21,8 +21,8 @@ app.controller('ViewDataMenuController', function($scope, $http) {
     localStorage.setItem("redirectAfterLogin", window.location.href);
     window.location.href = 'login.html';
   }
-  if(username == 'Admin') {
-    window.location.href = 'adminViewData.html';
+  if(username != 'Admin') {
+    window.location.href = 'viewData.html';
   }
 
     $http.get('http://103.75.25.77:3000/mapel')
@@ -32,11 +32,25 @@ app.controller('ViewDataMenuController', function($scope, $http) {
       .catch(function(error) {
         console.error('Error loading mapel:', error);
       });
+    
+      $http.get('http://103.75.25.77:3000/guru')
+      .then(function(response) {
+        $scope.guruList = [{ Teacher: "All" }].concat(response.data.Username);
+      })
+      .catch(function(error) {
+        console.error('Error loading guru:', error);
+      }); 
 
     $scope.selectedMataPelajaran = '';
 
     $scope.selectMapel = function(mapel) {
       $scope.selectedMataPelajaran = mapel;
+    };
+
+    $scope.selectedGuru = '';
+
+    $scope.selectGuru = function(guru) {
+      $scope.selectedGuru = guru;
     };
 
     $scope.selectedKategori = ''; 
@@ -68,20 +82,20 @@ app.controller('ViewDataMenuController', function($scope, $http) {
     if (
         !$scope.selectedKategori ||
         !$scope.selectedMataPelajaran ||
+        !$scopre.selectedGuru ||
         !anyKelasSelected
     ) {
-        alert('Semua field wajib diisi (Kategori, Mata Pelajaran, dan minimal satu Kelas).');
+        alert('Semua field wajib diisi (Kategori, Mata Pelajaran, Guru, dan minimal satu Kelas).');
         return;
     }
 
-        console.log($scope.selectedKategori);
         const kelasList = $scope.getSelectedKelas();
         const kelas = kelasList.map(encodeURIComponent).join('&kelas='); 
         console.log(kelas);
         console.log("hi");
         console.log($scope.selectedMataPelajaran);
 
-        const url = `viewData.html?kategori=${$scope.selectedKategori}&kelas=${kelas}&mapel=${$scope.selectedMataPelajaran}`;
+        const url = `adminViewData.html?kategori=${$scope.selectedKategori}&kelas=${kelas}&guru=${$scope.selectedGuru}&mapel=${$scope.selectedMataPelajaran}`;
         window.location.href = url;    
     };
 

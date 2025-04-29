@@ -35,6 +35,19 @@ app.get('/mapel', async (req, res) => {
   }
 });
 
+app.get('/guru', async (req, res) => {
+  try {
+    await client.connect();
+    const database = client.db('edubuddy_data');
+    const collection = database.collection('teachers'); 
+    const data = await collection.find().toArray();
+    res.status(200).json(data);
+  } catch (error) {
+    console.error('Error fetching subjects:', error);
+    res.status(500).send('Error fetching subjects');
+  }
+});
+
 app.get('/viewData', async (req, res) => {
   try {
     await client.connect();

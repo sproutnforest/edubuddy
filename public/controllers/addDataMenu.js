@@ -21,9 +21,9 @@ app.controller('AddDataMenuController', function($scope, $http) {
       localStorage.setItem("redirectAfterLogin", window.location.href);
       window.location.href = 'login.html';
   }
-  console.log("Logged in as:", username);
-  console.log("From school:", sekolah);
-  console.log("Stored LoginTime:", localStorage.getItem('LoginTime'));
+  if(username == 'Admin') {
+    window.location.href = 'adminViewData.html';
+  }
 
     $scope.selectedKategori = ''; // default is empty
 

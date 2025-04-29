@@ -2,7 +2,7 @@ var app = angular.module('edubuddy', []);
 
 app.controller('LoginController', function($scope, $http) {
   $scope.login = function() {
-    console.log("username:",  $scope.username);
+    console.log("email:",  $scope.email);
     console.log("password:", $scope.password);
 
     $http.post('http://103.75.25.77:3000/login', {

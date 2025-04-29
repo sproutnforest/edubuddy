@@ -21,9 +21,9 @@ app.controller('EditDataController', function($scope, $http) {
     localStorage.setItem("redirectAfterLogin", window.location.href);
     window.location.href = 'login.html';
   }
-  console.log("Logged in as:", username);
-  console.log("From school:", sekolah);
-  console.log("Stored LoginTime:", localStorage.getItem('LoginTime'));
+  if(username == 'Admin') {
+    window.location.href = 'adminViewData.html';
+  }
 
   const queryParams = new URLSearchParams(window.location.search);
   const dataId = queryParams.get('id');

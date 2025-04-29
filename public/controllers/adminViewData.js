@@ -1,6 +1,6 @@
 var app = angular.module('edubuddy', []);
 
-app.controller('ViewDataController', function($scope, $http, $window) {
+app.controller('AdminViewDataController', function($scope, $http, $window) {
   const username = localStorage.getItem('Username');
   const sekolah = localStorage.getItem('AsalSekolah');
   const loginTimeStr = localStorage.getItem('LoginTime');
@@ -21,27 +21,22 @@ app.controller('ViewDataController', function($scope, $http, $window) {
     localStorage.setItem("redirectAfterLogin", window.location.href);
     window.location.href = 'login.html';
   }
-  if(username == 'Admin') {
-    window.location.href = 'adminViewData.html';
+  if(username != 'Admin') {
+    window.location.href = 'viewData.html';
   }
 
   const params = new URLSearchParams($window.location.search);
   const kategori = params.get("kategori");
     const mapel = params.get("mapel");
+    const guru = params.get("guru");
     const kelasList = params.getAll("kelas");
-
-    if (!kategori || !mapel || kelasList.length === 0) {
-      window.location.href = 'viewDataMenu.html';
-      return;
-    }
 
     $http.get('http://103.75.25.77:3000/viewData')
     .then(function(response) {
         const allData = response.data;
-        console.log("All Data:", allData);
 
         $scope.filteredData = allData.filter(item => {
-        const matchUser = item.Sumber === username;
+        const matchUser = guru === "All" || item.Sumber === guru;
         const matchSchool = item.SumberSekolah === sekolah;
         const matchKategori = kategori === "All" || item.Kategori === kategori;
         const matchMapel = mapel === "All" || item.Pelajaran === mapel;
