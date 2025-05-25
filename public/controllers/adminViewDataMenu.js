@@ -14,15 +14,15 @@ app.controller('AdminViewDataMenuController', function($scope, $http) {
     if (diffMinutes > 30) {
       localStorage.clear();
       localStorage.setItem("redirectAfterLogin", window.location.href);
-      window.location.href = 'login.html';
+      window.location.href = '/login';
     }
   } else {
     localStorage.clear();
     localStorage.setItem("redirectAfterLogin", window.location.href);
-    window.location.href = 'login.html';
+    window.location.href = '/login';
   }
   if(username != 'Admin') {
-    window.location.href = 'viewDataMenu.html';
+    window.location.href = '/viewDataMenu';
   }
 
     $http.get('http://103.75.25.77:3000/mapel')
@@ -74,7 +74,7 @@ app.controller('AdminViewDataMenuController', function($scope, $http) {
     };
       
     $scope.addData = function() {
-      window.location.href = 'addDataMenu.html';
+      window.location.href = '/addDataMenu';
     }
 
     $scope.submitForm = function() {
@@ -96,12 +96,12 @@ app.controller('AdminViewDataMenuController', function($scope, $http) {
         console.log("hi");
         console.log($scope.selectedMataPelajaran);
 
-        const url = `adminViewData.html?kategori=${$scope.selectedKategori}&kelas=${kelas}&guru=${$scope.selectedGuru}&mapel=${$scope.selectedMataPelajaran}`;
+        const url = `/adminViewData?kategori=${$scope.selectedKategori}&kelas=${kelas}&guru=${$scope.selectedGuru}&mapel=${$scope.selectedMataPelajaran}`;
         window.location.href = url;    
     };
 
     $scope.logout = function() {
       localStorage.clear();
-      window.location.href = 'login.html';
+      window.location.href = '/login';
     }
 });

@@ -21,7 +21,7 @@ app.controller('LoginController', function($scope, $http) {
         localStorage.removeItem("redirectAfterLogin");
         window.location.href = redirectUrl;
       } else {
-        window.location.href = 'viewDataMenu.html';
+        window.location.href = '/viewDataMenu';
       }
     }).catch(function(error) {
       if (error.status === 401) {

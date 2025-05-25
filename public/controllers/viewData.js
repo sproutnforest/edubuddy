@@ -14,15 +14,15 @@ app.controller('ViewDataController', function($scope, $http, $window) {
     if (diffMinutes > 30) {
       localStorage.clear();
       localStorage.setItem("redirectAfterLogin", window.location.href);
-      window.location.href = 'login.html';
+      window.location.href = '/login';
     }
   } else {
     localStorage.clear();
     localStorage.setItem("redirectAfterLogin", window.location.href);
-    window.location.href = 'login.html';
+    window.location.href = '/login';
   }
   if(username == 'Admin') {
-    window.location.href = 'adminViewDataMenu.html';
+    window.location.href = '/adminViewDataMenu';
   }
 
   const params = new URLSearchParams($window.location.search);
@@ -31,7 +31,7 @@ app.controller('ViewDataController', function($scope, $http, $window) {
     const kelasList = params.getAll("kelas");
 
     if (!kategori || !mapel || kelasList.length === 0) {
-      window.location.href = 'viewDataMenu.html';
+      window.location.href = '/viewDataMenu';
       return;
     }
 
@@ -57,11 +57,11 @@ app.controller('ViewDataController', function($scope, $http, $window) {
     });
 
     $scope.editData = function(item) {
-        window.location.href = `editData.html?id=${item}`;
+        window.location.href = `/editData?id=${item}`;
       };
 
       $scope.addData = function() {
-        window.location.href = 'addDataMenu.html';
+        window.location.href = '/addDataMenu';
       }
       
       $scope.deleteData = function(id) {
@@ -79,7 +79,7 @@ app.controller('ViewDataController', function($scope, $http, $window) {
 
       $scope.logout = function() {
         localStorage.clear();
-        window.location.href = 'login.html';
+        window.location.href = '/login';
       }
 
 });

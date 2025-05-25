@@ -14,12 +14,12 @@ app.controller('EditDataController', function($scope, $http) {
     if (diffMinutes > 30) {
       localStorage.clear();
       localStorage.setItem("redirectAfterLogin", window.location.href);
-      window.location.href = 'login.html';
+      window.location.href = '/login';
     }
   } else {
     localStorage.clear();
     localStorage.setItem("redirectAfterLogin", window.location.href);
-    window.location.href = 'login.html';
+    window.location.href = '/login';
   }
 
   const queryParams = new URLSearchParams(window.location.search);
@@ -68,7 +68,7 @@ app.controller('EditDataController', function($scope, $http) {
   
   $scope.logout = function() {
     localStorage.clear();
-    window.location.href = 'login.html';
+    window.location.href = '/login';
   }
 });
 

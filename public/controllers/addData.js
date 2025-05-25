@@ -14,16 +14,16 @@ app.controller('AddDataController', function($scope, $http) {
     if (diffMinutes > 30) {
       localStorage.clear();
       localStorage.setItem("redirectAfterLogin", window.location.href);
-      window.location.href = 'login.html';
+      window.location.href = '/login';
     }
   } else {
       localStorage.clear();
       localStorage.setItem("redirectAfterLogin", window.location.href);
-      window.location.href = 'login.html';
+      window.location.href = '/login';
   }
   
   if(username == 'Admin') {
-    window.location.href = 'adminViewDataMenu.html';
+    window.location.href = '/adminViewDataMenu';
   }
 
   const queryParams = new URLSearchParams(window.location.search);
@@ -85,7 +85,7 @@ app.controller('AddDataController', function($scope, $http) {
   
   $scope.logout = function() {
     localStorage.clear();
-    window.location.href = 'login.html';
+    window.location.href = '/login';
   }
 
 });

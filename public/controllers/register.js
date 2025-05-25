@@ -31,7 +31,7 @@ app.controller('RegisterController', function($scope, $http) {
               localStorage.removeItem("redirectAfterLogin");
               window.location.href = redirectUrl;
             } else {
-              window.location.href = 'viewDataMenu.html'; 
+              window.location.href = '/viewDataMenu'; 
             }
 
         })

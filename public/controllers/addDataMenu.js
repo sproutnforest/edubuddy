@@ -14,15 +14,15 @@ app.controller('AddDataMenuController', function($scope, $http) {
     if (diffMinutes > 30) {
       localStorage.clear();
       localStorage.setItem("redirectAfterLogin", window.location.href);
-      window.location.href = 'login.html';
+      window.location.href = '/login';
     }
   } else {
       localStorage.clear();
       localStorage.setItem("redirectAfterLogin", window.location.href);
-      window.location.href = 'login.html';
+      window.location.href = '/login';
   }
   if(username == 'Admin') {
-    window.location.href = 'adminViewDataMenu.html';
+    window.location.href = '/adminViewDataMenu';
   }
 
     $scope.selectedKategori = ''; // default is empty
@@ -65,12 +65,12 @@ app.controller('AddDataMenuController', function($scope, $http) {
         const mapel = encodeURIComponent($scope.selectedMataPelajaran);
         const sumber = encodeURIComponent($scope.sumberbuku);
 
-        const url = `addData.html?kategori=${kategori}&kelas=${kelas}&mapel=${mapel}&sumber=${sumber}`;
+        const url = `/addData?kategori=${kategori}&kelas=${kelas}&mapel=${mapel}&sumber=${sumber}`;
         window.location.href = url;
       };
 
       $scope.logout = function() {
         localStorage.clear();
-        window.location.href = 'login.html';
+        window.location.href = '/login';
       }
 });
