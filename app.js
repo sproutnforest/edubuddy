@@ -50,6 +50,6 @@ app.get('/viewDataMenu', (req, res) => {
 })
 
 // Start the server
-app.listen(port, () => {
+app.listen(port, '0.0.0.0',() => {
   console.log(`App running at http://103.75.25.77:${port}`);
 });

@@ -15,25 +15,44 @@ app.options('*', cors(corsOptions));
 app.use('/static', express.static('public'));
 app.use(express.json());
 
-const uri = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/edubuddy_data';
+// const uri = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/edubuddy_data';
+
+const uri = process.env.MONGO_URI || 'mongodb://root:example@mongo:27017/edubuddy_data?authSource=admin';
+
 const client = new MongoClient(uri);
 
 let db;
 
 async function main() {
-  try {
-    await client.connect();
-    db = client.db('edubuddy_data');
-    console.log('Connected to MongoDB');
+  let retries = 5;
+  while (retries) {
+    try {
+      await client.connect();
+      db = client.db('edubuddy_data');
+      console.log('Connected to MongoDB');
 
-    app.listen(port, '0.0.0.0', () => {
-      console.log(`API server running at http://localhost:${port}`);
-    });
-  } catch (err) {
-    console.error('Failed to connect to MongoDB:', err);
-    process.exit(1);
+      app.listen(port, '0.0.0.0', () => {
+        console.log(`API server running at http://localhost:${port}`);
+      });
+      break;
+    } catch (err) {
+      console.error(`Failed to connect to MongoDB (${retries} retries left):`, err);
+      retries -= 1;
+      if (!retries) {
+        process.exit(1);
+      }
+      // Wait 5 seconds before retrying
+      await new Promise(resolve => setTimeout(resolve, 5000));
+    }
   }
 }
+
+app.get('/health', (req, res) => {
+  res.status(200).json({
+    status: 'UP',
+    mongo: db ? 'Connected' : 'Disconnected'
+  });
+});
 
 // Example route using the shared db instance
 app.get('/mapel', async (req, res) => {
