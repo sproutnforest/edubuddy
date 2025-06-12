@@ -1,10 +1,8 @@
 const express = require('express');
-const { MongoClient } = require('mongodb');
+const { MongoClient, ObjectId } = require('mongodb');
 const cors = require('cors');
 const app = express();
 const port = 3000;
-const { ObjectId } = require('mongodb');
-app.use(express.json());
 
 const corsOptions = {
   origin: '*',
@@ -13,20 +11,34 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
-
 app.options('*', cors(corsOptions));
+app.use('/static', express.static('public'));
+app.use(express.json());
 
-const uri = 'mongodb://127.0.0.1:27017';
+const uri = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/edubuddy_data';
 const client = new MongoClient(uri);
 
-app.use('/static', express.static('public'));
-app.use(express.json()); 
+let db;
 
-app.get('/mapel', async (req, res) => {
+async function main() {
   try {
     await client.connect();
-    const database = client.db('edubuddy_data');
-    const collection = database.collection('subjects'); 
+    db = client.db('edubuddy_data');
+    console.log('Connected to MongoDB');
+
+    app.listen(port, '0.0.0.0', () => {
+      console.log(`API server running at http://localhost:${port}`);
+    });
+  } catch (err) {
+    console.error('Failed to connect to MongoDB:', err);
+    process.exit(1);
+  }
+}
+
+// Example route using the shared db instance
+app.get('/mapel', async (req, res) => {
+  try {
+    const collection = db.collection('subjects');
     const data = await collection.find().toArray();
     res.status(200).json(data);
   } catch (error) {
@@ -37,37 +49,30 @@ app.get('/mapel', async (req, res) => {
 
 app.get('/guru', async (req, res) => {
   try {
-    await client.connect();
-    const database = client.db('edubuddy_data');
-    const collection = database.collection('teachers'); 
+    const collection = db.collection('teachers');
     const data = await collection.find().toArray();
     res.status(200).json(data);
   } catch (error) {
-    console.error('Error fetching subjects:', error);
-    res.status(500).send('Error fetching subjects');
+    console.error('Error fetching teachers:', error);
+    res.status(500).send('Error fetching teachers');
   }
 });
 
 app.get('/viewData', async (req, res) => {
   try {
-    await client.connect();
-    const database = client.db('edubuddy_data');
-    const collection = database.collection('subject_material'); 
-  
+    const collection = db.collection('subject_material');
     const data = await collection.find().toArray();
-    console.log(data);
     res.status(200).json(data);
   } catch (error) {
-    console.error('Error fetching subjects:', error);
-    res.status(500).send('Error fetching subjects');
+    console.error('Error fetching subject_material:', error);
+    res.status(500).send('Error fetching subject_material');
   }
 });
 
 app.get('/getDataById/:id', async (req, res) => {
   try {
     const id = req.params.id;
-    const database = client.db('edubuddy_data');
-    const collection = database.collection('subject_material');
+    const collection = db.collection('subject_material');
     const data = await collection.findOne({ _id: new ObjectId(id) });
     res.json(data);
   } catch (err) {
@@ -76,30 +81,22 @@ app.get('/getDataById/:id', async (req, res) => {
 });
 
 app.post('/addData', async (req, res) => {
-    try {
-      await client.connect(); 
-      const database = client.db('edubuddy_data');
-      const materialCollection = database.collection('subject_material');
-  
-      const newData = req.body;
-      console.log("Received new piece:", newData);
-      const result = await materialCollection.insertMany(newData);
-      res.status(201).json({ insertedId: result.insertedId });
-    } catch (error) {
-      console.error("Error inserting data:", error);
-      res.status(500).send('Error inserting data into MongoDB');
-    }
-})
+  try {
+    const materialCollection = db.collection('subject_material');
+    const newData = req.body;
+    const result = await materialCollection.insertMany(newData);
+    res.status(201).json({ insertedId: result.insertedId });
+  } catch (error) {
+    console.error("Error inserting data:", error);
+    res.status(500).send('Error inserting data into MongoDB');
+  }
+});
 
 app.delete('/deleteData/:id', async (req, res) => {
-  const id = req.params.id;
   try {
-    await client.connect();
-    const database = client.db('edubuddy_data');
-    const collection = database.collection('subject_material');
-
+    const id = req.params.id;
+    const collection = db.collection('subject_material');
     const result = await collection.deleteOne({ _id: new ObjectId(id) });
-
     if (result.deletedCount === 1) {
       res.status(200).send('Deleted successfully');
     } else {
@@ -115,10 +112,8 @@ app.put('/updateData/:id', async (req, res) => {
   try {
     const id = req.params.id;
     const updatedData = req.body;
-    await client.connect();
-    const database = client.db('edubuddy_data');
-    const collection = database.collection('subject_material');
-    const result = await collection.updateOne(
+    const collection = db.collection('subject_material');
+    await collection.updateOne(
       { _id: new ObjectId(id) },
       { $set: updatedData }
     );
@@ -128,37 +123,26 @@ app.put('/updateData/:id', async (req, res) => {
   }
 });
 
-
 app.post('/register', async (req, res) => {
   try {
-    await client.connect(); 
-    const database = client.db('edubuddy_data');
-    const materialCollection = database.collection('teachers');
-
+    const materialCollection = db.collection('teachers');
     const newData = req.body;
-    console.log("Received new piece:", newData);
     const result = await materialCollection.insertOne(newData);
     res.status(201).json({ insertedId: result.insertedId });
   } catch (error) {
     console.error("Error inserting data:", error);
     res.status(500).send('Error inserting data into MongoDB');
   }
-})
+});
 
 app.post('/login', async (req, res) => {
   try {
-    await client.connect();
-    const database = client.db('edubuddy_data');
-    const teachers = database.collection('teachers');
-
+    const teachers = db.collection('teachers');
     const { email, password } = req.body;
-
     const user = await teachers.findOne({ Email: email });
-
     if (!user || user.Password !== password) {
       return res.status(401).json({ message: "Invalid username or password" });
     }
-
     res.status(200).json({
       message: "Login successful",
       Username: user.Username,
@@ -170,6 +154,4 @@ app.post('/login', async (req, res) => {
   }
 });
 
-app.listen(port, '0.0.0.0', () => {
-    console.log(`Server running at http://localhost:${port}`);
-});
+main();

@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  mongo:
+    image: mongo:7
+    restart: always
+    volumes:
+      - mongo-data:/data/db
+
+  edubuddy:
+    build: .
+    depends_on:
+      - mongo
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/edubuddy_data
+    ports:
+      - "3000:3000"
+      - "5500:5500"
+    restart: always
+
+volumes:
+  mongo-data:

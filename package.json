@@ -15,7 +15,10 @@
     "connect-mongodb-session": "^5.0.0",
     "cookie-parser": "^1.4.7",
     "express-session": "^1.18.1",
-    "mongoose": "^8.13.2"
+    "mongoose": "^8.13.2",
+    "express": "^4.19.2",
+    "cors": "^2.8.5",
+    "mongodb": "^6.5.0"
   },
   "devDependencies": {
     "concurrently": "^9.1.2",
