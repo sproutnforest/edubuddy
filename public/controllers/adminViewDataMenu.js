@@ -25,22 +25,40 @@ app.controller('AdminViewDataMenuController', function($scope, $http) {
     window.location.href = '/viewDataMenu';
   }
 
-    $http.get('http://103.75.25.77:3000/mapel')
-      .then(function(response) {
-        $scope.mapelList = [{ Subject: "All" }].concat(response.data);
-      })
-      .catch(function(error) {
-        console.error('Error loading mapel:', error);
+  const { createClient } = supabase;
+
+  const SUPABASE_URL = 'https://delgfvwiakcgzglrqucs.supabase.co';
+  const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRlbGdmdndpYWtjZ3pnbHJxdWNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTMyODgzODksImV4cCI6MjA2ODg2NDM4OX0.qZ9RZDhC-dsDT19L3YMA1H2yEP2lVX_cAluHk3Zimws';
+
+  const supabaseClient = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+  supabaseClient
+      .from('subjects')
+      .select('*')
+      .then(({ data, error }) => {
+        if (error) {
+          console.error('Error loading mapel:', error);
+          $scope.mapelList = [{ Subject: "All" }];
+        } else {
+          // Adjust the property name if your column is not 'Subject'
+          $scope.mapelList = [{ Subject: "All" }].concat(data);
+        }
+        if(!$scope.$$phase) $scope.$apply();
       });
-    
-      $http.get('http://103.75.25.77:3000/guru')
-        .then(function(response) {
-            const usernames = response.data.map(guru => ({ Teacher: guru.Username }));
-            $scope.guruList = [{ Teacher: "All" }].concat(usernames);
-        })
-        .catch(function(error) {
-            console.error('Error loading guru:', error);
-        });
+
+      supabaseClient
+    .from('teachers')
+    .select('*')
+    .then(({ data, error }) => {
+      if (error) {
+        console.error('Error loading guru:', error);
+        $scope.guruList = [{ Username: "All" }];
+      } else {
+        // Adjust the property name if your column is not 'Teacher'
+        $scope.guruList = [{ Username: "All" }].concat(data);
+      }
+      if(!$scope.$$phase) $scope.$apply();
+    });
 
     $scope.selectedMataPelajaran = '';
 

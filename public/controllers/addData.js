@@ -26,6 +26,13 @@ app.controller('AddDataController', function($scope, $http) {
     window.location.href = '/adminViewDataMenu';
   }
 
+  const { createClient } = supabase;
+
+  const SUPABASE_URL = 'https://delgfvwiakcgzglrqucs.supabase.co';
+  const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRlbGdmdndpYWtjZ3pnbHJxdWNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTMyODgzODksImV4cCI6MjA2ODg2NDM4OX0.qZ9RZDhC-dsDT19L3YMA1H2yEP2lVX_cAluHk3Zimws';
+
+  const supabaseClient = createClient(SUPABASE_URL, SUPABASE_KEY);
+
   const queryParams = new URLSearchParams(window.location.search);
   const kategori = queryParams.get('kategori');
   const kelas = queryParams.get('kelas');
@@ -46,7 +53,7 @@ app.controller('AddDataController', function($scope, $http) {
     $scope.questions.push({ value: '' });
   };
 
-  $scope.submitForm = function() {
+  $scope.submitForm = async function() {
     try {
       const questions = $scope.questions.map(t => t.value.trim()).filter(q => q !== '');
       const answer = $scope.answer;
@@ -64,17 +71,20 @@ app.controller('AddDataController', function($scope, $http) {
           Jawaban: answer,
           Konteks: context
         }));
-  
-        $http.post('http://103.75.25.77:3000/addData', materials)
-          .then(function(response) {
-            console.log('Data added:', response.data);
+
+        const { data, error } = await supabaseClient
+        .from('subject_material') 
+        .insert(materials);
+
+        if (error) {
+          alert('Insert error:' + error);
+        } else {
+            console.log('Data added:', data);
             $scope.questions = [{ value: '' }];
             $scope.answer = '';
             $scope.context = '';
-          })
-          .catch(function(error) {
-            console.error('Error adding data:', error);
-          });
+            if(!$scope.$$phase) $scope.$apply();
+        }
       } else {
         alert('Tolong isi semua ketentuan');
       }

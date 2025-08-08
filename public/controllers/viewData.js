@@ -25,6 +25,13 @@ app.controller('ViewDataController', function($scope, $http, $window) {
     window.location.href = '/adminViewDataMenu';
   }
 
+  const { createClient } = supabase;
+
+  const SUPABASE_URL = 'https://delgfvwiakcgzglrqucs.supabase.co';
+  const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRlbGdmdndpYWtjZ3pnbHJxdWNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTMyODgzODksImV4cCI6MjA2ODg2NDM4OX0.qZ9RZDhC-dsDT19L3YMA1H2yEP2lVX_cAluHk3Zimws';
+
+  const supabaseClient = createClient(SUPABASE_URL, SUPABASE_KEY);
+
   const params = new URLSearchParams($window.location.search);
   const kategori = params.get("kategori");
     const mapel = params.get("mapel");
@@ -35,12 +42,18 @@ app.controller('ViewDataController', function($scope, $http, $window) {
       return;
     }
 
-    $http.get('http://103.75.25.77:3000/viewData')
-    .then(function(response) {
-        const allData = response.data;
-        console.log("All Data:", allData);
+    supabaseClient
+    .from('subject_material')
+    .select('*')
+    .then(({ data, error }) => {
+      if (error) {
+        console.error("Error fetching data:", error);
+        return;
+      }
+      const allData = data;
+      console.log("All Data:", allData);
 
-        $scope.filteredData = allData.filter(item => {
+      $scope.filteredData = allData.filter(item => {
         const matchUser = item.Sumber === username;
         const matchSchool = item.SumberSekolah === sekolah;
         const matchKategori = kategori === "All" || item.Kategori === kategori;
@@ -48,12 +61,10 @@ app.controller('ViewDataController', function($scope, $http, $window) {
         const matchKelas = kelasList.length === 0 || kelasList.includes(item.Kelas);
 
         return matchUser && matchSchool && matchKategori && matchMapel && matchKelas;
-        });
+      });
 
-        console.log("Filtered Data:", $scope.filteredData);
-    })
-    .catch(function(error) {
-        console.error("Error fetching data:", error);
+      console.log("Filtered Data:", $scope.filteredData);
+      if(!$scope.$$phase) $scope.$apply();
     });
 
     $scope.editData = function(item) {
@@ -64,18 +75,23 @@ app.controller('ViewDataController', function($scope, $http, $window) {
         window.location.href = '/addDataMenu';
       }
       
-      $scope.deleteData = function(id) {
+      $scope.deleteData = async function(id) {
         if (confirm("Are you sure you want to delete this item?")) {
-          $http.delete('http://103.75.25.77:3000/deleteData/' + id)
-            .then(function(response) {
-              console.log("Deleted:", response.data);
-              $scope.filteredData = $scope.filteredData.filter(item => item._id !== id);
-            })
-            .catch(function(error) {
-              console.error("Error deleting:", error);
-            });
+            const { error } = await supabaseClient
+                .from('subject_material')
+                .delete()
+                .eq('id', id);
+
+            if (error) {
+                console.error("Error deleting:", error);
+                alert("Gagal menghapus data: " + error.message);
+            } else {
+                console.log("Deleted:", id);
+                $scope.filteredData = $scope.filteredData.filter(item => item.id !== id);
+                if(!$scope.$$phase) $scope.$apply();
+            }
         }
-      };
+    };
 
       $scope.logout = function() {
         localStorage.clear();

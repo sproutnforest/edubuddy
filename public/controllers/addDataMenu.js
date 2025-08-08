@@ -25,6 +25,13 @@ app.controller('AddDataMenuController', function($scope, $http) {
     window.location.href = '/adminViewDataMenu';
   }
 
+  const { createClient } = supabase;
+
+  const SUPABASE_URL = 'https://delgfvwiakcgzglrqucs.supabase.co';
+  const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRlbGdmdndpYWtjZ3pnbHJxdWNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTMyODgzODksImV4cCI6MjA2ODg2NDM4OX0.qZ9RZDhC-dsDT19L3YMA1H2yEP2lVX_cAluHk3Zimws';
+
+  const supabaseClient = createClient(SUPABASE_URL, SUPABASE_KEY);
+
     $scope.selectedKategori = ''; // default is empty
 
     $scope.selectKategori = function(value) {
@@ -39,12 +46,17 @@ app.controller('AddDataMenuController', function($scope, $http) {
 
     $scope.selectedMataPelajaran = ''; // default is empty
 
-    $http.get('http://103.75.25.77:3000/mapel')
-      .then(function(response) {
-        $scope.mapelList = response.data;
-      })
-      .catch(function(error) {
-        console.error('Error loading mapel:', error);
+  supabaseClient
+      .from('subjects')
+      .select('*')
+      .then(({ data, error }) => {
+        if (error) {
+            console.error('Error loading mapel:', error);
+            $scope.mapelList = [];
+        } else {
+          $scope.mapelList = data;
+        }
+        if(!$scope.$$phase) $scope.$apply();
       });
 
     $scope.selectMapel = function(mapel) {

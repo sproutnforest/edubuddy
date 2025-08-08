@@ -22,6 +22,13 @@ app.controller('EditDataController', function($scope, $http) {
     window.location.href = '/login';
   }
 
+  const { createClient } = supabase;
+
+  const SUPABASE_URL = 'https://delgfvwiakcgzglrqucs.supabase.co';
+  const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRlbGdmdndpYWtjZ3pnbHJxdWNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTMyODgzODksImV4cCI6MjA2ODg2NDM4OX0.qZ9RZDhC-dsDT19L3YMA1H2yEP2lVX_cAluHk3Zimws';
+
+  const supabaseClient = createClient(SUPABASE_URL, SUPABASE_KEY);
+
   const queryParams = new URLSearchParams(window.location.search);
   const dataId = queryParams.get('id');
 
@@ -32,39 +39,49 @@ app.controller('EditDataController', function($scope, $http) {
   $scope.context = '';
   $scope.source = username;
 
-  $http.get('http://103.75.25.77:3000/getDataById/' + dataId)
-  .then(function(response) {
-    $scope.editItem = response.data;
-    console.log($scope.editItem);
-    $scope.question = $scope.editItem.Pertanyaan;
-    $scope.answer = $scope.editItem.Jawaban;
-    $scope.context = $scope.editItem.Konteks;
-  })
-  .catch(function(error) {
-    console.error('Error loading item:', error);
+  supabaseClient
+  .from('subject_material')
+  .select('*')
+  .eq('id', dataId)
+  .single()
+  .then(({ data, error }) => {
+    if (error) {
+      console.error('Error loading item:', error);
+      return;
+    }
+    $scope.editItem = data;
+    $scope.question = data.Pertanyaan;
+    $scope.answer = data.Jawaban;
+    $scope.context = data.Konteks;
+    if(!$scope.$$phase) $scope.$apply();
   });
 
-  $scope.submitForm = function() {
-    const updatedData = {
-      Pertanyaan: $scope.question,
-      Jawaban: $scope.answer,
-      Konteks: $scope.context,
-      SumberBuku: $scope.editItem.SumberBuku, // keep other unchanged fields if needed
-      kategori: $scope.editItem.kategori,
-      mapel: $scope.editItem.mapel,
-      kelas: $scope.editItem.kelas,
-      sumber: $scope.editItem.sumber
-    };
-  
-    $http.put('http://103.75.25.77:3000/updateData/' + dataId, updatedData)
-      .then(function(response) {
-        alert("Data updated successfully!");
-        window.location.href = document.referrer;
-      })
-      .catch(function(error) {
-        console.error('Update failed:', error);
-      });
+  $scope.submitForm = async function() {
+  const updatedData = {
+    Pertanyaan: $scope.question,
+    Jawaban: $scope.answer,
+    Konteks: $scope.context,
+    SumberBuku: $scope.editItem.SumberBuku,
+    Kategori: $scope.editItem.Kategori,
+    Pelajaran: $scope.editItem.Pelajaran,
+    Kelas: $scope.editItem.Kelas,
+    Sumber: $scope.editItem.Sumber,
+    SumberSekolah: $scope.editItem.SumberSekolah
   };
+
+  const { error } = await supabaseClient
+    .from('subject_material')
+    .update(updatedData)
+    .eq('id', dataId);
+
+  if (error) {
+    console.error('Update failed:', error);
+    alert('Update failed: ' + error.message);
+  } else {
+    alert("Data updated successfully!");
+    window.location.href = document.referrer;
+  }
+};
   
   $scope.logout = function() {
     localStorage.clear();

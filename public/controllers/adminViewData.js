@@ -25,6 +25,13 @@ app.controller('AdminViewDataController', function($scope, $http, $window) {
     window.location.href = '/viewDataMenu';
   }
 
+  const { createClient } = supabase;
+
+  const SUPABASE_URL = 'https://delgfvwiakcgzglrqucs.supabase.co';
+  const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRlbGdmdndpYWtjZ3pnbHJxdWNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTMyODgzODksImV4cCI6MjA2ODg2NDM4OX0.qZ9RZDhC-dsDT19L3YMA1H2yEP2lVX_cAluHk3Zimws';
+
+  const supabaseClient = createClient(SUPABASE_URL, SUPABASE_KEY);
+
   const params = new URLSearchParams($window.location.search);
   const kategori = params.get("kategori");
     const mapel = params.get("mapel");
@@ -34,13 +41,20 @@ app.controller('AdminViewDataController', function($scope, $http, $window) {
     if (!kategori || !mapel || kelasList.length === 0) {
         window.location.href = '/adminViewDataMenu';
         return;
+    }
+    
+      supabaseClient
+    .from('subject_material')
+    .select('*')
+    .then(({ data, error }) => {
+      if (error) {
+        console.error("Error fetching data:", error);
+        return;
       }
+      const allData = data;
+      console.log("All Data:", allData);
 
-    $http.get('http://103.75.25.77:3000/viewData')
-    .then(function(response) {
-        const allData = response.data;
-
-        $scope.filteredData = allData.filter(item => {
+      $scope.filteredData = allData.filter(item => {
         const matchUser = guru === "All" || item.Sumber === guru;
         const matchKategori = kategori === "All" || item.Kategori === kategori;
         const matchMapel = mapel === "All" || item.Pelajaran === mapel;
@@ -49,10 +63,8 @@ app.controller('AdminViewDataController', function($scope, $http, $window) {
         return matchUser && matchKategori && matchMapel && matchKelas;
         });
 
-        console.log("Filtered Data:", $scope.filteredData);
-    })
-    .catch(function(error) {
-        console.error("Error fetching data:", error);
+      console.log("Filtered Data:", $scope.filteredData);
+      if(!$scope.$$phase) $scope.$apply();
     });
 
     $scope.editData = function(item) {
@@ -63,22 +75,77 @@ app.controller('AdminViewDataController', function($scope, $http, $window) {
         window.location.href = '/addDataMenu';
       }
       
-      $scope.deleteData = function(id) {
+      $scope.deleteData = async function(id) {
         if (confirm("Are you sure you want to delete this item?")) {
-          $http.delete('http://103.75.25.77:3000/deleteData/' + id)
-            .then(function(response) {
-              console.log("Deleted:", response.data);
-              $scope.filteredData = $scope.filteredData.filter(item => item._id !== id);
-            })
-            .catch(function(error) {
-              console.error("Error deleting:", error);
-            });
+            const { error } = await supabaseClient
+                .from('subject_material')
+                .delete()
+                .eq('id', id);
+
+            if (error) {
+                console.error("Error deleting:", error);
+                alert("Gagal menghapus data: " + error.message);
+            } else {
+                console.log("Deleted:", id);
+                $scope.filteredData = $scope.filteredData.filter(item => item.id !== id);
+                if(!$scope.$$phase) $scope.$apply();
+            }
         }
+    };
+
+      $scope.downloadJSONL = function() {
+    try {
+        const raw = JSON.parse(JSON.stringify($scope.filteredData));
+        const cleanedData = raw.map(item => ({
+            messages: [
+                { role: "System", content: item.Konteks || "" },
+                { role: "User", content: item.Pertanyaan || "" },
+                { role: "Chatbot", content: item.Jawaban || "" }
+            ]
+        }));
+
+        // Convert to JSONL (one JSON object per line)
+        const jsonlContent = cleanedData.map(obj => JSON.stringify(obj)).join('\n');
+        const blob = new Blob([jsonlContent], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'material.jsonl';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    } catch (error) {
+        console.log("Export error:", error.message);
+        alert("Gagal ekspor data: " + error.message);
+    }
+};
+
+$scope.downloadXLSX = function() {
+            try {
+
+    const raw = JSON.parse(JSON.stringify($scope.filteredData));
+
+    const cleanedData = raw.map(item => {
+        const { Sumber, SumberSekolah, Pelajaran, Kategori, Kelas, SumberBuku, Pertanyaan, Jawaban, Konteks, } = item;
+        return { Sumber, SumberSekolah, Pelajaran, Kategori, Kelas, SumberBuku, Pertanyaan, Jawaban, Konteks };
+      });
+
+      const worksheet = XLSX.utils.json_to_sheet(cleanedData);
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, "Data");
+
+      XLSX.writeFile(workbook, "material.xlsx");
+    } catch (error) {
+      console.log("Export error:", error.message);
+      alert("Gagal ekspor data: " + error.message);
+    }
       };
 
       $scope.logout = function() {
         localStorage.clear();
         window.location.href = '/login';
-      }
+      };
 
 });
